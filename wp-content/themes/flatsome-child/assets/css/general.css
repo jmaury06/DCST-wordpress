@@ -1,0 +1,21 @@
+.main-container {
+    box-sizing: border-box;
+    margin: 0;
+    max-width: 100%;
+    width: 100vw;
+    position: relative;
+}
+
+.components-section {
+    display: block;
+    width: 100%;
+    position: relative;
+    padding: 25px;
+}
+
+.components-container {
+    max-width: 1440px;
+    width: 100%;
+    position: relative;
+    margin: 0 auto;
+}

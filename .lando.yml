@@ -1,0 +1,7 @@
+name: dc-www-wordpress-prod_theme-seo
+recipe: wordpress
+config:
+  framework: wordpress
+  php: '7.3'
+  site: dc-www-wordpress-prod
+  id: 9b42b184-a1bb-454f-acfb-f1950aaee40c

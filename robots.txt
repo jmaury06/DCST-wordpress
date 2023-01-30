@@ -1,0 +1,7 @@
+User-agent: *
+Disallow: /wp-admin/
+Disallow: /viewer/
+Disallow: /support/user/
+Disallow: /support/member/
+Allow: /wp-admin/admin-ajax.php
+Sitemap: https://www.dacast.com/sitemap_index.xml

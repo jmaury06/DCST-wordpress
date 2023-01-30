@@ -1,0 +1,187 @@
+/*
+Theme Name: Flatsome Child
+Description: This is a child theme for Flatsome Theme
+Author: UX Themes
+Template: flatsome
+Version: 3.0
+*/
+
+/* Author box */
+
+.author-box {
+	border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+	margin: 1em 0 2.6em 0;
+	padding: 0 0 1em 0;
+}
+
+/* Hide duplicated author name */
+
+.byline {
+	display: none;
+}
+
+/* Hide s pace beneath form */
+
+.nf-small p {
+	display: none;
+}
+
+/* Hide red squares when validation fails */
+
+.nf-small .nf-error.field-wrap .nf-field-element:after {
+	display: none;
+}
+
+/* Remove space around forms */
+
+.nf-small .nf-form-content {
+	padding: 0;
+}
+
+/* Submit button styles */
+
+.nf-small [type=button] {
+	background: #4967EE !important;
+	padding: 0 19px !important;
+	line-height: normal;
+	height: auto !important;
+}
+
+.nf-small [type=button]:hover {
+	color: white !important;
+}
+
+/*CSS: Bt marketing*/
+
+.multiple-links-menu-item {
+	margin-bottom: 0 !important;
+}
+
+.multiple-links-menu-item a {
+	color: #818181;
+	font-size: 17px;
+	text-transform: capitalize;
+}
+
+.multiple-links-menu-item a:hover {
+	color: #4967ee;
+	font-weight: bold;
+	text-decoration: underline;
+}
+
+@media only screen and (max-width: 849px) {
+	.mfp-wrap {
+		z-index: 99999999;
+	}
+	.off-canvas-right .mfp-content, .off-canvas-left .mfp-content, #mega-menu-wrap-primary_mobile {
+		width: 100%;
+		background-color: transparent;
+		padding: 20px;
+	}
+	.mfp-content .mobile-sidebar {
+		background-color: white;
+		border-radius: 16px;
+		padding-top: 20px;
+	}
+	.mfp-wrap .mfp-close {
+		top: 30px;
+		right: 30px;
+	}
+	#mega-menu-wrap-primary_mobile #mega-menu-primary_mobile>li.mega-menu-item>a.mega-menu-link {
+		padding: 2px 1px;
+	}
+	#mega-menu-wrap-primary_mobile #mega-menu-primary_mobile li.mega-menu-megamenu>ul.mega-sub-menu>li.mega-menu-row .mega-menu-column>ul.mega-sub-menu>li.mega-menu-item {
+		padding: 5px 0 5px 5px;
+	}
+	#mega-menu-wrap-primary_mobile #mega-menu-primary_mobile.mega-menu-accordion>li.mega-menu-item {
+		margin: 0;
+	}
+	#mega-menu-wrap-primary_mobile .mega-menu-toggle+#mega-menu-primary_mobile {
+		padding: 15px 0px 15px 0px;
+	}
+	#mega-menu-wrap-primary_mobile .mt-c-menu {
+		margin-top: 0px !important;
+	}
+	#mega-menu-wrap-primary_mobile #mega-menu-primary_mobile.mega-menu-accordion li.mega-menu-item>ul.mega-sub-menu {
+		border-bottom: 1px solid #f0f0f0;
+		box-shadow: none;
+	}
+	.header-search-form-wrapper .searchform input[type="search"] {
+		padding: 21px 10px;
+		border-top-left-radius: 5px;
+		border-bottom-left-radius: 5px;
+	}
+	.header-search-form-wrapper .searchform .button.icon {
+		border-top-right-radius: 5px;
+		border-bottom-right-radius: 5px;
+		background-color: #4967EE;
+	}
+	.header-social-icons .social-icons i {
+		min-width: 2em;
+	}
+	.off-canvas:not(.off-canvas-center) li.html {
+		padding: 0 20px;
+	}
+	.nav-sidebar.nav-vertical>li+li {
+		border-top: 0;
+	}
+	#mega-menu-wrap-primary_mobile {
+		padding-bottom: 0;
+	}
+	#custom-expanded-menu-buttons {
+		margin-top: 10px;
+		margin-bottom: 8px;
+	}
+	#custom-expanded-menu-buttons button:first-child {
+		color: #4967EE;
+		border-color: #4967EE;
+		margin-right: 5px;
+	}
+}
+
+.nav>li>a .signUpButtonHeader {
+	border-radius: 4px;
+	margin-bottom: 0;
+	font-size: 1.3em;
+	-ms-touch-action: none;
+	font-weight: bolder;
+	border: 2px solid transparent;
+	color: #FFF;
+	padding: 0 1.2em;
+	min-height: 2.5em;
+	line-height: 2.2em;
+	text-rendering: optimizeLegibility;
+	box-sizing: border-box;
+}
+
+.empty_field {
+    display: none !important;
+}
+
+footer select#language {
+    display:none;
+}
+
+footer .select-container {
+    width: 100px;
+}
+
+.language-select {
+    width: 120px;
+}
+
+footer .select2-container .select2-selection {
+    background: none;
+    box-shadow: none;
+    color: #FFFFFF;
+    border: none;
+}
+
+footer .select2-container .select2-selection--single .select2-selection__rendered {
+    color: #FFFFFF;
+}
+
+.language-select .select2-results__option {
+    margin: 0;
+    padding: 4px;
+}

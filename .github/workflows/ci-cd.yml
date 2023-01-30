@@ -1,0 +1,123 @@
+name: Dacast Wordpress
+on:
+  push:
+    branches:
+      - aws_deploy_dev
+      - aws_deploy_stage
+      - main
+jobs:
+  deploy:
+    name: CI/CD Pipeline
+    runs-on: ubuntu-18.04
+    strategy:
+      matrix:
+        dev-appname: ['dacast-wp-development-application']
+        dev-deploy-group: ['dacast-wp-development-application-group']
+        dev-s3-bucket: ['development-dacast-wp-codedeploy-deployments']
+        dev-s3-filename: ['development-dacast-wp-${{ github.sha }}']
+        stage-appname: ['dacast-wp-stage-application']
+        stage-deploy-group: ['dacast-wp-stage-application-group']
+        stage-s3-bucket: ['stage-dacast-wp-codedeploy-deployments']
+        stage-s3-filename: ['stage-dacast-wp-${{ github.sha }}']
+
+        prod-appname: ['dacast-wp-production-application']
+        prod-deploy-group: ['dacast-wp-production-application-group']
+        prod-s3-bucket: ['production-dacast-wp-codedeploy-deployments']
+        prod-s3-filename: ['production-dacast-wp-${{ github.sha }}']
+    steps:
+      - uses: actions/checkout@v2
+      # Install AWS CLI 2
+      #- name: Install AWS CLI 2
+      #  run: |
+      #    curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+      #    unzip awscliv2.zip
+      #    sudo ./aws/install
+      # Configure AWS credentials
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      # Deploy push to AWS S3
+      - name: AWS Deploy push for Development
+        if: github.ref == 'refs/heads/aws_deploy_dev'
+        run: |
+          aws deploy push \
+          --application-name ${{ matrix.dev-appname }} \
+          --description "This is a revision for the ${{ matrix.dev-appname }}-${{ github.sha }}" \
+          --ignore-hidden-files \
+          --s3-location s3://${{ matrix.dev-s3-bucket }}/${{ matrix.dev-s3-filename }}.zip \
+          --source .
+      - name: AWS Deploy push for Stage
+        if: github.ref == 'refs/heads/aws_deploy_stage'
+        run: |
+          aws deploy push \
+          --application-name ${{ matrix.stage-appname }} \
+          --description "This is a revision for the ${{ matrix.stage-appname }}-${{ github.sha }}" \
+          --ignore-hidden-files \
+          --s3-location s3://${{ matrix.stage-s3-bucket }}/${{ matrix.stage-s3-filename }}.zip \
+          --source .
+      - name: AWS Deploy push for Production
+        if: github.ref == 'refs/heads/main'
+        run: |
+          aws deploy push \
+          --application-name ${{ matrix.prod-appname }} \
+          --description "This is a revision for the ${{ matrix.prod-appname }}-${{ github.sha }}" \
+          --ignore-hidden-files \
+          --s3-location s3://${{ matrix.prod-s3-bucket }}/${{ matrix.prod-s3-filename }}.zip \
+          --source .
+      # Create deployment to CodeDeploy
+      - name: AWS Create Deployment for Development
+        if: github.ref == 'refs/heads/aws_deploy_dev'
+        run: |
+          echo "deployment_id=$(aws deploy create-deployment \
+           --application-name ${{ matrix.dev-appname }} \
+           --deployment-config-name CodeDeployDefault.OneAtATime \
+           --deployment-group-name ${{ matrix.dev-deploy-group }} \
+           --file-exists-behavior OVERWRITE \
+           --s3-location bucket=${{ matrix.dev-s3-bucket }},key=${{ matrix.dev-s3-filename }}.zip,bundleType=zip \
+           --query "deploymentId" \
+           --output text)" >> $GITHUB_ENV
+      - name: AWS Create Deployment for Stage
+        if: github.ref == 'refs/heads/aws_deploy_stage'
+        run: |
+          echo "deployment_id=$(aws deploy create-deployment \
+           --application-name ${{ matrix.stage-appname }} \
+           --deployment-config-name CodeDeployDefault.OneAtATime \
+           --deployment-group-name ${{ matrix.stage-deploy-group }} \
+           --file-exists-behavior OVERWRITE \
+           --s3-location bucket=${{ matrix.stage-s3-bucket }},key=${{ matrix.stage-s3-filename }}.zip,bundleType=zip \
+           --query "deploymentId" \
+           --output text)" >> $GITHUB_ENV
+      - name: AWS Create Deployment for Production
+        if: github.ref == 'refs/heads/main'
+        run: |
+          echo "deployment_id=$(aws deploy create-deployment \
+           --application-name ${{ matrix.prod-appname }} \
+           --deployment-config-name CodeDeployDefault.OneAtATime \
+           --deployment-group-name ${{ matrix.prod-deploy-group }} \
+           --file-exists-behavior OVERWRITE \
+           --s3-location bucket=${{ matrix.prod-s3-bucket }},key=${{ matrix.prod-s3-filename }}.zip,bundleType=zip \
+           --query "deploymentId" \
+           --output text)" >> $GITHUB_ENV
+
+      # Check deployment Status
+      - name: AWS deployment Status
+        run: |
+          aws deploy wait deployment-successful --deployment-id ${{ env.deployment_id }}
+
+      # Cloudfront invalidation
+      - name: Invalidate CF Cache Development
+        if: github.ref == 'refs/heads/aws_deploy_dev'
+        run: |
+          aws cloudfront create-invalidation --distribution-id ${{ secrets.AWS_DEV_CLOUDFRONT_DISTRIBUTION_ID }} --paths "/*"
+      - name: Invalidate CF Cache Stage
+        if: github.ref == 'refs/heads/aws_deploy_stage'
+        run: |
+          aws cloudfront create-invalidation --distribution-id ${{ secrets.AWS_STAGE_CLOUDFRONT_DISTRIBUTION_ID }} --paths "/*"
+      - name: Invalidate CF Cache Production
+        if: github.ref == 'refs/heads/main'
+        run: |
+          aws cloudfront create-invalidation --distribution-id ${{ secrets.AWS_PROD_CLOUDFRONT_DISTRIBUTION_ID }} --paths "/*"

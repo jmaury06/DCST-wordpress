@@ -1,0 +1,13 @@
+diff --git a/wp-content/plugins/add-to-any/add-to-any.php b/wp-content/plugins/add-to-any/add-to-any.php
+index 580c6a0ec..e5fe0d47f 100644
+--- a/wp-content/plugins/add-to-any/add-to-any.php
++++ b/wp-content/plugins/add-to-any/add-to-any.php
+@@ -855,7 +855,7 @@ function A2A_SHARE_SAVE_head_script() {
+ 			. 'a=d.createElement(s);'
+ 			. 'b=d.getElementsByTagName(s)[0];'
+ 			. 'a.async=1;'
+-			. 'a.src="' . $static_server . '/page.js' . $querystring . '";'
++			. 'a.src="?file=addtoany.js";'
+ 			. 'b.parentNode.insertBefore(a,b);'
+ 		. '})(document,"script");'		
+ 		. "\n</script>\n";
